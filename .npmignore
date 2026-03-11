@@ -1,0 +1,13 @@
+# .npmignore
+# Include everything by default, but ignore Git and IDE specific stuff
+.git/
+.github/
+.vscode/
+.idea/
+.gitignore
+*.log
+node_modules/
+
+# Ensure dist is NOT ignored (it shouldn't be anyway if it's not here, 
+# but being explicit helps since it is in .gitignore)
+!dist/
