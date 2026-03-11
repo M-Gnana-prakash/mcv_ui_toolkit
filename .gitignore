@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+
+# Ide / local files
+.vscode/
+.idea/
+*.log
+.DS_Store

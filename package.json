@@ -1,6 +1,13 @@
 {
   "name": "mcv-ui-toolkit",
   "version": "0.0.1",
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json",
+    "prepare": "npm run build"
+  },
+  "main": "dist/fesm2022/mcv-ui-toolkit.mjs",
+  "module": "dist/fesm2022/mcv-ui-toolkit.mjs",
+  "typings": "dist/index.d.ts",
   "peerDependencies": {
     "@angular/common": "^21.1.0",
     "@angular/core": "^21.1.0",
