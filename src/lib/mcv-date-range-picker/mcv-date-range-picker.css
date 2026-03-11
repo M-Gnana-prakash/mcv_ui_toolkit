@@ -1,0 +1,178 @@
+.mcv-range-wrapper {
+    position: relative;
+    width: 20rem;
+    /* w-80 */
+}
+
+.mcv-label {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.mcv-input-container {
+    position: relative;
+}
+
+.mcv-range-input {
+    width: 100%;
+    outline: none;
+    transition: all 0.2s;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    background: transparent;
+}
+
+.mcv-range-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.mcv-calendar-icon {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Size Variants */
+.size-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+.size-md {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.size-lg {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+.label-sm {
+    font-size: 0.75rem;
+}
+
+.label-md {
+    font-size: 0.875rem;
+}
+
+.label-lg {
+    font-size: 1rem;
+}
+
+/* Popup Styles */
+.mcv-calendar-popup {
+    position: absolute;
+    z-index: 50;
+    margin-top: 0.5rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    width: 20rem;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+.mcv-calendar-header {
+    background: #f3f4f6;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mcv-month-select {
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    background: white;
+    cursor: pointer;
+}
+
+.mcv-nav-btns {
+    display: flex;
+    gap: 1rem;
+    color: #4b5563;
+}
+
+.mcv-nav-btn {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    transition: background 0.2s;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.mcv-nav-btn:hover {
+    background: #e5e7eb;
+}
+
+.mcv-weekdays {
+    display: grid;
+    grid-template-cols: repeat(7, 1fr);
+    text-align: center;
+    font-size: 0.75rem;
+    color: #6b7280;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.mcv-days-grid {
+    display: grid;
+    grid-template-cols: repeat(7, 1fr);
+    text-align: center;
+    padding: 0.75rem;
+    row-gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+.mcv-day-cell {
+    position: relative;
+    height: 2rem;
+    cursor: pointer;
+}
+
+.mcv-range-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+}
+
+.mcv-day-circle {
+    position: relative;
+    z-index: 10;
+    width: 2rem;
+    height: 2rem;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    transition: all 0.2s;
+}
+
+.mcv-day-circle:hover:not(.mcv-edge-day) {
+    background: #f3f4f6;
+}
+
+.mcv-edge-day {
+    color: white;
+}
+
+.required-star {
+    color: #ef4444;
+    margin-left: 0.125rem;
+}

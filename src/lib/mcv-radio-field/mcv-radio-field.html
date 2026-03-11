@@ -1,49 +1,48 @@
-<div class="flex flex-col gap-2">
+<div class="mcv-radio-group">
 
   @if (label) {
-  <label [style.color]="computedStyles.labelColor" [ngClass]="{
-                 'text-sm font-medium mb-1': true,
-                 'opacity-50': disabled
-               }">
-    {{ label }} @if(required){<span class="text-red-500">*</span>}
+  <label class="mcv-label" [style.color]="computedStyles.labelColor" [ngClass]="{
+                  'text-sm': computedStyles.sizeVariant === 'sm',
+                  'text-md': computedStyles.sizeVariant === 'md',
+                  'text-lg': computedStyles.sizeVariant === 'lg',
+                  'disabled': disabled
+                }">
+    {{ label }} @if(required){<span class="required-star">*</span>}
   </label>
   }
 
-  <div [ngClass]="{
-      'flex flex-col gap-2': layout === 'vertical',
-      'flex flex-row flex-wrap gap-4': layout === 'horizontal'
+  <div class="mcv-radio-list" [ngClass]="{
+      'mcv-radio-list-vertical': layout === 'vertical',
+      'mcv-radio-list-horizontal': layout === 'horizontal'
     }">
     @for (option of options; track option.value) {
-    <label class="flex items-center gap-2 cursor-pointer" [class.cursor-not-allowed]="disabled || option.disabled"
-      [class.opacity-50]="disabled || option.disabled">
+    <label class="mcv-radio-item" [class.disabled]="disabled || option.disabled">
 
       <input type="radio" [name]="name" [value]="option.value" [checked]="value === option.value"
         [disabled]="disabled || option.disabled" (click)="onOptionChange(option.value)" (blur)="onBlur()"
-        class="sr-only peer">
+        class="mcv-hidden-input">
 
       <!-- Custom Radio Circle -->
-      <div class="rounded-full border transition-all duration-200 flex items-center justify-center
-                    peer-focus:ring-2 peer-focus:ring-offset-1 peer-focus:ring-gray-100
-                    peer-checked:peer-focus:outline-none"
+      <div class="mcv-radio-circle"
         [style.border-color]="value === option.value ? computedStyles.selectedColor : computedStyles.borderStyle"
         [style.background-color]="computedStyles.backgroundColor" [ngClass]="{
-               'w-4 h-4': computedStyles.sizeVariant === 'sm',
-               'w-5 h-5': computedStyles.sizeVariant === 'md',
-               'w-6 h-6': computedStyles.sizeVariant === 'lg'
+               'size-sm': computedStyles.sizeVariant === 'sm',
+               'size-md': computedStyles.sizeVariant === 'md',
+               'size-lg': computedStyles.sizeVariant === 'lg'
              }">
         <!-- Inner dot -->
-        <div class="rounded-full transform scale-0 transition-transform duration-200"
-          [style.background-color]="computedStyles.selectedColor" [class.scale-100]="value === option.value" [ngClass]="{
-                  'w-1.5 h-1.5': computedStyles.sizeVariant === 'sm',
-                  'w-2 h-2': computedStyles.sizeVariant === 'md',
-                  'w-2.5 h-2.5': computedStyles.sizeVariant === 'lg'
+        <div class="mcv-radio-dot" [style.background-color]="computedStyles.selectedColor"
+          [class.checked]="value === option.value" [ngClass]="{
+                  'dot-sm': computedStyles.sizeVariant === 'sm',
+                  'dot-md': computedStyles.sizeVariant === 'md',
+                  'dot-lg': computedStyles.sizeVariant === 'lg'
                 }"></div>
       </div>
 
       <span [style.color]="computedStyles.labelColor" [ngClass]="{
-                        'text-xs': computedStyles.sizeVariant === 'sm',
-                        'text-sm': computedStyles.sizeVariant === 'md',
-                        'text-base': computedStyles.sizeVariant === 'lg'
+                        'text-sm': computedStyles.sizeVariant === 'sm',
+                        'text-md': computedStyles.sizeVariant === 'md',
+                        'text-lg': computedStyles.sizeVariant === 'lg'
                       }">
         {{ option.label }}
       </span>

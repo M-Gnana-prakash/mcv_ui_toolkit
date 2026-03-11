@@ -1,27 +1,27 @@
-<div class="flex flex-col w-full gap-1">
+<div class="mcv-field-wrapper">
 
     @if (label) {
-    <label [class]="{
-            'text-xs': computedStyles.sizeVariant === 'sm',
-            'text-sm': computedStyles.sizeVariant === 'md',
-            'text-base': computedStyles.sizeVariant === 'lg'
-        }" class="font-medium text-gray-700 dark:text-gray-300 mb-1">
-        {{ label }} @if(required){<span class="text-red-500">*</span>}
+    <label class="mcv-label" [ngClass]="{
+            'label-sm': computedStyles.sizeVariant === 'sm',
+            'label-md': computedStyles.sizeVariant === 'md',
+            'label-lg': computedStyles.sizeVariant === 'lg'
+        }">
+        {{ label }} @if(required){<span class="required-star">*</span>}
     </label>
     }
-    <div class="flex items-center w-full rounded transition-all duration-200"
+
+    <div class="mcv-input-container"
         [style.border]="isFocused ? computedStyles.activeBorderStyle : computedStyles.borderStyle"
         [style.outline]="isFocused ? computedStyles.activeOutline : computedStyles.outline"
         [style.background-color]="isFocused ? computedStyles.activeBackgroundColor : computedStyles.backgroundColor">
 
         <input #inputField [type]="type" [placeholder]="placeholder" [disabled]="disabled" [readOnly]="readonly"
             [minLength]="minLength" [maxLength]="maxLength === Infinity ? null : maxLength" [value]="value"
-            (input)="onInputChange($event)" (focus)="isFocused = true" (blur)="onBlur()"
-            class="w-full bg-transparent border-none focus:outline-none" [ngClass]="[
-                 computedStyles.sizeVariant === 'sm' ? 'px-2 py-1 text-xs' : '',
-                 computedStyles.sizeVariant === 'md' ? 'px-3 py-2 text-sm' : '',
-                 computedStyles.sizeVariant === 'lg' ? 'px-4 py-3 text-base' : '',
-                 disabled ? 'opacity-50 cursor-not-allowed' : '',
+            (input)="onInputChange($event)" (focus)="isFocused = true" (blur)="onBlur()" class="mcv-input-field"
+            [ngClass]="[
+                 computedStyles.sizeVariant === 'sm' ? 'size-sm' : '',
+                 computedStyles.sizeVariant === 'md' ? 'size-md' : '',
+                 computedStyles.sizeVariant === 'lg' ? 'size-lg' : '',
                  inputClass
                ]"
             [style.color]="isFocused ? (computedStyles.activeTextColor || null) : (computedStyles.textColor || null)" />

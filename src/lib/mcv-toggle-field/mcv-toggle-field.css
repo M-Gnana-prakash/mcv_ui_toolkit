@@ -1,0 +1,99 @@
+.mcv-toggle-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.mcv-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.mcv-toggle-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    transition: all 0.3s ease-in-out;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+}
+
+.mcv-toggle-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.mcv-toggle-thumb {
+    display: inline-block;
+    border-radius: 9999px;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: translateX(0.25rem);
+    transition: transform 0.3s ease-in-out;
+}
+
+.mcv-toggle-label {
+    font-weight: 500;
+    user-select: none;
+    transition: color 0.2s;
+}
+
+/* Size Variants */
+.size-sm {
+    width: 2.75rem;
+    height: 1.5rem;
+}
+
+.size-md {
+    width: 3.5rem;
+    height: 1.75rem;
+}
+
+.size-lg {
+    width: 4rem;
+    height: 2rem;
+}
+
+.thumb-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+.thumb-md {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.thumb-lg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Transitions for Thumb position */
+.checked-sm {
+    transform: translateX(1.5rem);
+}
+
+.checked-md {
+    transform: translateX(2rem);
+}
+
+.checked-lg {
+    transform: translateX(2.25rem);
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.text-md {
+    font-size: 1rem;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+}

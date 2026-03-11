@@ -1,29 +1,25 @@
-<div class="relative w-80 calendar-wrapper">
+<div class="mcv-range-wrapper calendar-wrapper">
   @if (label) {
-  <label [class]="{
-            'text-xs': computedStyles.sizeVariant === 'sm',
-            'text-sm': computedStyles.sizeVariant === 'md',
-            'text-base': computedStyles.sizeVariant === 'lg'
-        }" [style.color]="computedStyles.labelColor" class="font-medium mb-1 block">
-    {{ label }} @if(required){<span class="text-red-500">*</span>}
+  <label class="mcv-label" [style.color]="computedStyles.labelColor" [ngClass]="{
+            'label-sm': computedStyles.sizeVariant === 'sm',
+            'label-md': computedStyles.sizeVariant === 'md',
+            'label-lg': computedStyles.sizeVariant === 'lg'
+        }">
+    {{ label }} @if(required){<span class="required-star">*</span>}
   </label>
   }
 
   <!-- Input -->
-  <div class="relative">
+  <div class="mcv-input-container">
     <input [disabled]="disabled" readonly (click)="toggle()" [value]="format(start) + (end ? ' – ' + format(end) : '')"
-      placeholder="Enter a date range" class="w-full focus:outline-none transition-all duration-200"
-      [style.border]="computedStyles.borderStyle" [style.background-color]="computedStyles.backgroundColor"
-      [style.color]="computedStyles.textColor" [ngClass]="{
-          'px-2 py-1 text-xs': computedStyles.sizeVariant === 'sm',
-          'px-3 py-2 text-sm': computedStyles.sizeVariant === 'md',
-          'px-4 py-3 text-base': computedStyles.sizeVariant === 'lg',
-          'opacity-50 cursor-not-allowed': disabled,
-          'rounded': true
+      placeholder="Enter a date range" class="mcv-range-input" [style.border]="computedStyles.borderStyle"
+      [style.background-color]="computedStyles.backgroundColor" [style.color]="computedStyles.textColor" [ngClass]="{
+          'size-sm': computedStyles.sizeVariant === 'sm',
+          'size-md': computedStyles.sizeVariant === 'md',
+          'size-lg': computedStyles.sizeVariant === 'lg'
       }" />
 
-    <span (click)="toggle()" class="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 cursor-pointer"
-      [style.color]="computedStyles.selectedColor">
+    <span (click)="toggle()" class="mcv-calendar-icon" [style.color]="computedStyles.selectedColor">
       📅
     </span>
   </div>
@@ -34,41 +30,31 @@
 
   <!-- Popup -->
   @if (show) {
-  <div class="absolute z-50 mt-2 bg-white dark:bg-boxdark rounded-lg shadow-xl w-80 overflow-hidden">
+  <div class="mcv-calendar-popup">
 
     <!-- Header -->
-    <div class="bg-gray-100 dark:bg-meta-4 px-4 py-3 flex justify-between items-center">
+    <div class="mcv-calendar-header">
 
-      <div class="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-300">
-
-        <select
-          class="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-boxdark text-gray-700 dark:text-gray-300"
-          [value]="current.getMonth()" (change)="setMonth($any($event.target).value)">
-
-
-          <option *ngFor="let m of months; let i = index" [value]="i" [selected]="current.getMonth() === i">
-
+      <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #374151;">
+        <select class="mcv-month-select" [value]="current.getMonth()" (change)="setMonth($any($event.target).value)">
+          @for (m of months; track m; let i = $index) {
+          <option [value]="i" [selected]="current.getMonth() === i">
             {{ m }}
           </option>
-
-
+          }
         </select>
-
       </div>
 
-      <div class="flex gap-4 text-gray-600 dark:text-gray-400">
-        <button type="button" (click)="change(-1)"
-          class="w-8 h-8 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-meta-4 rounded-full transition-colors text-xl font-bold">‹</button>
-        <button type="button" (click)="change(1)"
-          class="w-8 h-8 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-meta-4 rounded-full transition-colors text-xl font-bold">›</button>
+      <div class="mcv-nav-btns">
+        <button type="button" (click)="change(-1)" class="mcv-nav-btn">‹</button>
+        <button type="button" (click)="change(1)" class="mcv-nav-btn">›</button>
       </div>
 
     </div>
 
     <!-- Weekdays -->
-    <div
-      class="grid grid-cols-7 text-center text-xs text-gray-500 dark:text-gray-400 py-2 border-b border-gray-200 dark:border-gray-700">
-      @for (d of ['S','M','T','W','T','F','S']; track d + $index) {
+    <div class="mcv-weekdays">
+      @for (d of ['S','M','T','W','T','F','S']; track $index) {
       <div>
         {{ d }}
       </div>
@@ -76,24 +62,21 @@
     </div>
 
     <!-- Dates -->
-    <div class="grid grid-cols-7 text-center p-3 gap-y-2 text-sm text-gray-700 dark:text-gray-300">
+    <div class="mcv-days-grid">
 
       @for (d of days; track $index) {
-      <div (click)="d && select(d)" class="relative h-8" [class.cursor-pointer]="d">
+      <div (click)="d && select(d)" class="mcv-day-cell">
 
         @if (d) {
         <!-- Range background -->
         @if (inRange(d)) {
-        <div class="absolute inset-0" [style.background-color]="computedStyles.selectedColor" style="opacity: 0.1">
+        <div class="mcv-range-bg" [style.background-color]="computedStyles.selectedColor">
         </div>
         }
 
         <!-- Date circle -->
-        <div
-          class="relative z-10 w-8 h-8 mx-auto flex items-center justify-center rounded-full transition-colors duration-200"
-          [ngClass]="{
-            'text-white': isEdge(d),
-            'hover:bg-gray-100 dark:hover:bg-meta-4': !isEdge(d)
+        <div class="mcv-day-circle" [ngClass]="{
+            'mcv-edge-day': isEdge(d)
           }" [style.background-color]="isEdge(d) ? computedStyles.selectedColor : 'transparent'">
           {{ d.getDate() }}
         </div>

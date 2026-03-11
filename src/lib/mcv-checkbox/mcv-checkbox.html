@@ -1,37 +1,35 @@
-<div class="flex flex-col gap-1">
-  <div class="flex items-center gap-2 cursor-pointer" (click)="toggle()" [class.cursor-not-allowed]="disabled"
-    [class.opacity-50]="disabled">
+<div class="mcv-checkbox-wrapper">
+  <div class="mcv-checkbox-row" (click)="toggle()" [class.disabled]="disabled">
 
     <!-- Checkbox Visual -->
-    <div class="flex items-center justify-center transition-all duration-200 border rounded" [ngClass]="{
-                'w-4 h-4': computedStyles.sizeVariant === 'sm',
-                'w-5 h-5': computedStyles.sizeVariant === 'md',
-                'w-6 h-6': computedStyles.sizeVariant === 'lg'
+    <div class="mcv-checkbox-box" [ngClass]="{
+                'box-sm': computedStyles.sizeVariant === 'sm',
+                'box-md': computedStyles.sizeVariant === 'md',
+                'box-lg': computedStyles.sizeVariant === 'lg'
              }" [style.border]="value ? ('1px solid ' + computedStyles.selectedColor) : computedStyles.borderStyle"
-      [style.background-color]="value ? computedStyles.selectedColor : computedStyles.backgroundColor"
-      [style.border-width]="'1px'">
+      [style.background-color]="value ? computedStyles.selectedColor : computedStyles.backgroundColor">
 
       @if (value) {
-      <svg style="color: white" [class]="{
-                        'w-3 h-3': computedStyles.sizeVariant === 'sm',
-                        'w-4 h-4': computedStyles.sizeVariant === 'md',
-                        'w-5 h-5': computedStyles.sizeVariant === 'lg'
-                     }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+      <svg style="color: white; fill: none;" [ngClass]="{
+                        'icon-sm': computedStyles.sizeVariant === 'sm',
+                        'icon-md': computedStyles.sizeVariant === 'md',
+                        'icon-lg': computedStyles.sizeVariant === 'lg'
+                     }" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
       </svg>
       }
     </div>
 
-    <!-- Hidden Input for accessibility/form submission if needed (optional since we handle logic in TS) -->
+    <!-- Hidden Input -->
     <input type="checkbox" [checked]="value" [disabled]="disabled" [required]="required"
-      (change)="onInputChange($event)" (focus)="isFocused = true" (blur)="isFocused = false" class="sr-only" />Check Me!
+      (change)="onInputChange($event)" (focus)="isFocused = true" (blur)="isFocused = false" class="mcv-hidden-input" />
 
     <!-- Label -->
     @if (label) {
-    <span [style.color]="computedStyles.labelColor" [ngClass]="{
-                    'text-xs': computedStyles.sizeVariant === 'sm',
-                    'text-sm': computedStyles.sizeVariant === 'md',
-                    'text-base': computedStyles.sizeVariant === 'lg'
+    <span class="mcv-checkbox-label" [style.color]="computedStyles.labelColor" [ngClass]="{
+                    'text-sm': computedStyles.sizeVariant === 'sm',
+                    'text-md': computedStyles.sizeVariant === 'md',
+                    'text-lg': computedStyles.sizeVariant === 'lg'
                   }">
       {{ label }}
     </span>

@@ -15,6 +15,15 @@ import { CommonModule } from '@angular/common';
     standalone: true,
     imports: [CommonModule],
     templateUrl: './mcv-field-errors.html',
+    styles: [`
+        .mcv-error-container { margin-top: 0.25rem; }
+        .mcv-error-text { 
+            color: #ef4444; 
+            font-size: 0.75rem; 
+            margin-top: 0.125rem;
+            font-family: inherit;
+        }
+    `]
 })
 export class McvFieldErrors {
     /** List of error messages to display */

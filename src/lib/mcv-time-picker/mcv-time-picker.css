@@ -1,0 +1,66 @@
+.mcv-field-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.25rem;
+}
+
+.mcv-label {
+    font-weight: 500;
+    color: #4b5563;
+    margin-bottom: 0.25rem;
+}
+
+.mcv-input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-radius: 0.25rem;
+    transition: all 0.2s;
+}
+
+.mcv-time-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: inherit;
+}
+
+.mcv-time-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Size Variants */
+.size-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+.size-md {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.size-lg {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+.label-sm {
+    font-size: 0.75rem;
+}
+
+.label-md {
+    font-size: 0.875rem;
+}
+
+.label-lg {
+    font-size: 1rem;
+}
+
+.required-star {
+    color: #ef4444;
+    margin-left: 0.125rem;
+}

@@ -1,15 +1,15 @@
-<div class="flex flex-col w-full gap-1">
+<div class="mcv-field-wrapper">
   @if (label) {
-  <label [class]="{
-            'text-xs': computedStyles.sizeVariant === 'sm',
-            'text-sm': computedStyles.sizeVariant === 'md',
-            'text-base': computedStyles.sizeVariant === 'lg'
-        }" class="font-medium text-gray-700 dark:text-gray-300 mb-1">
-    {{ label }} @if(required){<span class="text-red-500">*</span>}
+  <label class="mcv-label" [ngClass]="{
+            'size-sm': computedStyles.sizeVariant === 'sm',
+            'size-md': computedStyles.sizeVariant === 'md',
+            'size-lg': computedStyles.sizeVariant === 'lg'
+        }">
+    {{ label }} @if(required){<span class="required-star">*</span>}
   </label>
   }
 
-  <div class="flex items-center w-full rounded transition-all duration-200" [style.border]="(isFocused || isSelectFocused)
+  <div class="mcv-input-container" [style.border]="(isFocused || isSelectFocused)
       ? computedStyles.activeBorderStyle
       : computedStyles.borderStyle" [style.outline]="(isFocused || isSelectFocused)
       ? computedStyles.activeOutline
@@ -19,17 +19,13 @@
     <!-- Country code dropdown -->
     @if (showCountryCode) {
     <select [(ngModel)]="countryCode" (ngModelChange)="isTouched = true" (focus)="isSelectFocused = true"
-      (blur)="isSelectFocused = false" [disabled]="disabled" class="bg-transparent border-none focus:outline-none cursor-pointer border-r
-               appearance-none
-               bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')]
-               bg-no-repeat bg-position-[right_0.5rem_center]" [ngClass]="{
-          'px-2 py-1 pr-6 text-xs': computedStyles.sizeVariant === 'sm',
-          'px-3 py-2 pr-8 text-sm': computedStyles.sizeVariant === 'md',
-          'px-4 py-3 pr-10 text-base': computedStyles.sizeVariant === 'lg',
-          'opacity-50 cursor-not-allowed': disabled
+      (blur)="isSelectFocused = false" [disabled]="disabled" class="mcv-country-select" [ngClass]="{
+          'size-sm select-sm': computedStyles.sizeVariant === 'sm',
+          'size-md select-md': computedStyles.sizeVariant === 'md',
+          'size-lg select-lg': computedStyles.sizeVariant === 'lg'
         }" [style.border-right]="(isFocused || isSelectFocused)
           ? computedStyles.activeBorderStyle
-          : computedStyles.borderStyle" [style.color]="(isFocused || isSelectFocused)
+          : computedStyles.borderStyle" [style.border-right-width]="'1px'" [style.color]="(isFocused || isSelectFocused)
           ? computedStyles.activeTextColor
           : computedStyles.textColor">
       @for (item of countryCodes; track item.code) {
@@ -40,12 +36,10 @@
 
     <!-- Phone Input -->
     <input [(ngModel)]="value" (ngModelChange)="isTouched = true" [placeholder]="placeholder" [disabled]="disabled"
-      [readOnly]="readonly" (focus)="isFocused = true" (blur)="onBlur()"
-      class="w-full bg-transparent border-none focus:outline-none" [ngClass]="{
-        'px-2 py-1 text-xs': computedStyles.sizeVariant === 'sm',
-        'px-3 py-2 text-sm': computedStyles.sizeVariant === 'md',
-        'px-4 py-3 text-base': computedStyles.sizeVariant === 'lg',
-        'opacity-50 cursor-not-allowed': disabled
+      [readOnly]="readonly" (focus)="isFocused = true" (blur)="onBlur()" class="mcv-phone-input" [ngClass]="{
+        'size-sm': computedStyles.sizeVariant === 'sm',
+        'size-md': computedStyles.sizeVariant === 'md',
+        'size-lg': computedStyles.sizeVariant === 'lg'
       }" [style.color]="(isFocused || isSelectFocused)
         ? computedStyles.activeTextColor
         : computedStyles.textColor" />
