@@ -1,0 +1,49 @@
+<div class="flex flex-col gap-1">
+  <div class="flex items-center gap-3">
+
+    <!-- Toggle Button -->
+    <button type="button" (click)="toggle($event)" [disabled]="disabled"
+      class="relative inline-flex items-center rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-0"
+      [ngClass]="{
+        'w-11 h-6': computedStyles.sizeVariant === 'sm',
+        'w-14 h-7': computedStyles.sizeVariant === 'md',
+        'w-16 h-8': computedStyles.sizeVariant === 'lg',
+        'opacity-50 cursor-not-allowed': disabled,
+        'cursor-pointer': !disabled,
+        'focus:ring-blue-500': value,
+        'focus:ring-gray-200': !value
+      }" [style.background-color]="value ? computedStyles.selectedColor : computedStyles.trackColor">
+
+      <!-- Knob -->
+      <span class="inline-block rounded-full shadow-lg transform transition-transform duration-300 ease-in-out"
+        [ngClass]="{
+          'w-4 h-4': computedStyles.sizeVariant === 'sm',
+          'w-5 h-5': computedStyles.sizeVariant === 'md',
+          'w-6 h-6': computedStyles.sizeVariant === 'lg',
+          'translate-x-1': !value,
+          'translate-x-6': value && computedStyles.sizeVariant === 'sm',
+          'translate-x-7': value && computedStyles.sizeVariant === 'md',
+          'translate-x-8': value && computedStyles.sizeVariant === 'lg'
+        }" [style.background-color]="computedStyles.thumbColor">
+      </span>
+    </button>
+
+    <!-- Label + Yes/No -->
+    @if (label || onLabel || offLabel) {
+    <span class="font-medium select-none transition-colors duration-200" [style.color]="computedStyles.labelColor"
+      [ngClass]="{
+          'text-sm': computedStyles.sizeVariant === 'sm',
+          'text-base': computedStyles.sizeVariant === 'md',
+          'text-lg': computedStyles.sizeVariant === 'lg',
+          'opacity-50': disabled
+        }">
+      {{ label }} {{ value ? onLabel : offLabel }}
+    </span>
+    }
+
+  </div>
+
+  <!-- Validation -->
+  <mcv-field-errors [errors]="errors" [show]="needValidationStatusMessage && errors.length > 0 && isTouched">
+  </mcv-field-errors>
+</div>

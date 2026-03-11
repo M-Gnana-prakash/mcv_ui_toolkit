@@ -1,0 +1,44 @@
+<div class="flex flex-col gap-1">
+  <div class="flex items-center gap-2 cursor-pointer" (click)="toggle()" [class.cursor-not-allowed]="disabled"
+    [class.opacity-50]="disabled">
+
+    <!-- Checkbox Visual -->
+    <div class="flex items-center justify-center transition-all duration-200 border rounded" [ngClass]="{
+                'w-4 h-4': computedStyles.sizeVariant === 'sm',
+                'w-5 h-5': computedStyles.sizeVariant === 'md',
+                'w-6 h-6': computedStyles.sizeVariant === 'lg'
+             }" [style.border]="value ? ('1px solid ' + computedStyles.selectedColor) : computedStyles.borderStyle"
+      [style.background-color]="value ? computedStyles.selectedColor : computedStyles.backgroundColor"
+      [style.border-width]="'1px'">
+
+      @if (value) {
+      <svg style="color: white" [class]="{
+                        'w-3 h-3': computedStyles.sizeVariant === 'sm',
+                        'w-4 h-4': computedStyles.sizeVariant === 'md',
+                        'w-5 h-5': computedStyles.sizeVariant === 'lg'
+                     }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+      }
+    </div>
+
+    <!-- Hidden Input for accessibility/form submission if needed (optional since we handle logic in TS) -->
+    <input type="checkbox" [checked]="value" [disabled]="disabled" [required]="required"
+      (change)="onInputChange($event)" (focus)="isFocused = true" (blur)="isFocused = false" class="sr-only" />Check Me!
+
+    <!-- Label -->
+    @if (label) {
+    <span [style.color]="computedStyles.labelColor" [ngClass]="{
+                    'text-xs': computedStyles.sizeVariant === 'sm',
+                    'text-sm': computedStyles.sizeVariant === 'md',
+                    'text-base': computedStyles.sizeVariant === 'lg'
+                  }">
+      {{ label }}
+    </span>
+    }
+  </div>
+
+  <!-- Validation -->
+  <mcv-field-errors [errors]="errors" [show]="needValidationStatusMessage && errors.length > 0 && isTouched">
+  </mcv-field-errors>
+</div>
