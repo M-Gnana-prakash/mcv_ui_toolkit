@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
@@ -9,8 +10,15 @@ import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
   styleUrl: './mcv-toggle-field.css',
   standalone: true,
   imports: [CommonModule, McvFieldErrors],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => McvToggleField),
+      multi: true
+    }
+  ]
 })
-export class McvToggleField {
+export class McvToggleField implements ControlValueAccessor {
 
   @Input() value: boolean = false;
   @Input() label: string = '';
@@ -43,6 +51,27 @@ export class McvToggleField {
     touched: boolean;
   }>();
 
+  // ControlValueAccessor
+  onChange: any = () => { };
+  onTouched: any = () => { };
+
+  writeValue(value: boolean): void {
+    this.value = !!value;
+    this.validate();
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
   get computedStyles(): McvFieldStyles {
     return { ...this.defaultStyles, ...this.styles };
   }
@@ -52,6 +81,7 @@ export class McvToggleField {
 
     this.value = !this.value;
     this.isTouched = true;
+    this.onTouched(); // Emit onTouched on change for better UX
 
     if (event?.currentTarget) {
       (event.currentTarget as HTMLElement).blur();
@@ -61,6 +91,7 @@ export class McvToggleField {
 
     // Emit boolean only
     this.valueChange.emit(this.value);
+    this.onChange(this.value);
   }
 
   validate() {

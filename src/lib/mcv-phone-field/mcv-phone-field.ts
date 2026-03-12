@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectorRef, inject, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { COUNTRY_CODES, PHONE_MAX_LENGTH_BY_COUNTRY } from './phone-country-codes';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
@@ -11,9 +11,15 @@ import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
   imports: [CommonModule, FormsModule, McvFieldErrors],
   templateUrl: './mcv-phone-field.html',
   styleUrl: './mcv-phone-field.css',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => McvPhoneField),
+      multi: true
+    }
+  ]
 })
-
-export class McvPhoneField implements OnInit, OnChanges {
+export class McvPhoneField implements OnInit, OnChanges, ControlValueAccessor {
 
   @Input() label: string = '';
   @Input() set value(val: string) {
@@ -137,17 +143,56 @@ export class McvPhoneField implements OnInit, OnChanges {
 
   private phoneLengthByCountryCode = PHONE_MAX_LENGTH_BY_COUNTRY;
 
+  @Output() valueChange = new EventEmitter<string>();
+
+  // ControlValueAccessor
+  onChange: any = () => { };
+  onTouched: any = () => { };
+
+  writeValue(value: string): void {
+    this._rawValue = value || '';
+    this.processIncomingValue();
+    this.validate();
+    this.cdr.detectChanges();
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this._rawValue = target.value;
     this._innerValue = target.value;
     this.isTouched = true;
+
+    // Calculate full value to emit
+    const digitsOnly = this._innerValue.replace(/\D/g, '');
+    let fullValue = '';
+    if (this._showCountryCode) {
+      const effectiveCode = this._countryCode || this._defaultCountryCode || '+91';
+      fullValue = `${effectiveCode}${digitsOnly}`;
+    } else {
+      fullValue = this._rawValue;
+    }
+
+    this.onChange(fullValue);
+    this.valueChange.emit(fullValue);
     this.validate();
   }
 
   onBlur() {
     this.isFocused = false;
     this.isTouched = true;
+    this.onTouched();
     this.validate();
   }
 

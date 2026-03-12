@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
@@ -9,8 +10,15 @@ import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
   imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-checkbox.html',
   styleUrl: './mcv-checkbox.css',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => McvCheckbox),
+      multi: true
+    }
+  ]
 })
-export class McvCheckbox {
+export class McvCheckbox implements ControlValueAccessor {
 
   @Input() value: boolean = false;
   @Input() set checked(val: boolean) {
@@ -48,10 +56,42 @@ export class McvCheckbox {
     touched: boolean;
   }>();
 
+  @Output() valueChange = new EventEmitter<boolean>();
+
+  // ControlValueAccessor
+  onChange: any = () => { };
+  onTouched: any = () => { };
+
+  writeValue(value: boolean): void {
+    this.value = !!value;
+    this.validate();
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.value = target.checked;
     this.isTouched = true;
+    this.onChange(this.value);
+    this.valueChange.emit(this.value);
+    this.validate();
+  }
+
+  onBlur() {
+    this.isFocused = false;
+    this.isTouched = true;
+    this.onTouched();
     this.validate();
   }
 
@@ -59,6 +99,8 @@ export class McvCheckbox {
     if (this.disabled || this.readonly) return;
     this.value = !this.value;
     this.isTouched = true;
+    this.onChange(this.value);
+    this.valueChange.emit(this.value);
     this.validate();
   }
 

@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, ElementRef, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
@@ -9,8 +10,15 @@ import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
   imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-input-field.html',
   styleUrl: './mcv-input-field.css',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => McvInputField),
+      multi: true
+    }
+  ]
 })
-export class McvInputField {
+export class McvInputField implements ControlValueAccessor {
   @ViewChild('inputField') inputField!: ElementRef<HTMLInputElement>;
 
   focus() {
@@ -85,18 +93,44 @@ export class McvInputField {
     touched: boolean;
   }>();
 
+  @Output() valueChange = new EventEmitter<string>();
+
   public errors: string[] = [];
+
+  // ControlValueAccessor
+  onChange: any = () => { };
+  onTouched: any = () => { };
+
+  writeValue(value: string): void {
+    this.value = value || '';
+    this.validate();
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
 
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.value = target.value;
     this.isTouched = true;
+    this.onChange(this.value);
+    this.valueChange.emit(this.value);
     this.validate();
   }
 
   onBlur() {
     this.isFocused = false;
     this.isTouched = true;
+    this.onTouched();
     this.validate();
   }
 

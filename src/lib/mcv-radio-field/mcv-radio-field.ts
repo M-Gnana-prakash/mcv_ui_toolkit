@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
@@ -15,8 +16,15 @@ export interface RadioOption {
     imports: [CommonModule, McvFieldErrors],
     templateUrl: './mcv-radio-field.html',
     styleUrl: './mcv-radio-field.css',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => McvRadioField),
+            multi: true
+        }
+    ]
 })
-export class McvRadioField {
+export class McvRadioField implements ControlValueAccessor {
 
     @Input() value: string = '';
     @Input() options: RadioOption[] = [];
@@ -55,6 +63,27 @@ export class McvRadioField {
 
     @Output() valueChange = new EventEmitter<string>();
 
+    // ControlValueAccessor
+    onChange: any = () => { };
+    onTouched: any = () => { };
+
+    writeValue(value: string): void {
+        this.value = value || '';
+        this.validate();
+    }
+
+    registerOnChange(fn: any): void {
+        this.onChange = fn;
+    }
+
+    registerOnTouched(fn: any): void {
+        this.onTouched = fn;
+    }
+
+    setDisabledState?(isDisabled: boolean): void {
+        this.disabled = isDisabled;
+    }
+
     onOptionChange(selectedValue: string) {
         if (this.disabled || this.readonly) return;
 
@@ -67,11 +96,13 @@ export class McvRadioField {
         }
 
         this.valueChange.emit(this.value);
+        this.onChange(this.value);
         this.validate();
     }
 
     onBlur() {
         this.isTouched = true;
+        this.onTouched();
         this.validate();
     }
 

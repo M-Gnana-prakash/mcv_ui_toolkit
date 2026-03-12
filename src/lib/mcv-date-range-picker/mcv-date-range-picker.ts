@@ -4,8 +4,10 @@ import {
   HostListener,
   Input,
   Output,
-  EventEmitter
+  EventEmitter,
+  forwardRef
 } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
@@ -14,9 +16,16 @@ import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
   standalone: true,
   imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-date-range-picker.html',
-  styleUrl: './mcv-date-range-picker.css'
+  styleUrl: './mcv-date-range-picker.css',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => McvDateRangePicker),
+      multi: true
+    }
+  ]
 })
-export class McvDateRangePicker {
+export class McvDateRangePicker implements ControlValueAccessor {
 
   //Input
   @Input() label: string = '';
@@ -40,6 +49,35 @@ export class McvDateRangePicker {
     errors: string[];
     touched: boolean;
   }>();
+
+  @Output() valueChange = new EventEmitter<{ start: Date | null; end: Date | null }>();
+
+  // ControlValueAccessor
+  onChange: any = () => { };
+  onTouched: any = () => { };
+
+  writeValue(value: { start: Date | null; end: Date | null } | null): void {
+    if (value) {
+      this.start = this.parseDate(value.start);
+      this.end = this.parseDate(value.end);
+    } else {
+      this.start = null;
+      this.end = null;
+    }
+    this.validate();
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
 
   show = false;
   current = new Date();
@@ -101,6 +139,7 @@ export class McvDateRangePicker {
     this.show = !this.show;
     if (!this.show) {
       this.isTouched = true;
+      this.onTouched();
       this.validate();
     }
   }
@@ -162,6 +201,8 @@ export class McvDateRangePicker {
     }
 
     this.isTouched = true;
+    this.onChange({ start: this.start, end: this.end });
+    this.valueChange.emit({ start: this.start, end: this.end });
     this.validate();
   }
 

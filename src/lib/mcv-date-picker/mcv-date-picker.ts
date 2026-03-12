@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
@@ -9,8 +10,15 @@ import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
   imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-date-picker.html',
   styleUrl: './mcv-date-picker.css',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => McvDatePicker),
+      multi: true
+    }
+  ]
 })
-export class McvDatePicker implements OnInit {
+export class McvDatePicker implements OnInit, ControlValueAccessor {
   // Value & config
   @Input() value: string = '';          // Value in 'yyyy-MM-dd' format internally
   @Input() label: string = '';
@@ -53,6 +61,29 @@ export class McvDatePicker implements OnInit {
     touched: boolean;
   }>();
 
+  @Output() valueChange = new EventEmitter<string>();
+
+  // ControlValueAccessor
+  onChange: any = () => { };
+  onTouched: any = () => { };
+
+  writeValue(value: string): void {
+    this.value = value || '';
+    this.validate();
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
   ngOnInit() {
     this.validate();
   }
@@ -61,6 +92,8 @@ export class McvDatePicker implements OnInit {
     const target = event.target as HTMLInputElement;
     this.value = target.value;
     this.isTouched = true;
+    this.onChange(this.value);
+    this.valueChange.emit(this.value);
     this.validate();
   }
 
