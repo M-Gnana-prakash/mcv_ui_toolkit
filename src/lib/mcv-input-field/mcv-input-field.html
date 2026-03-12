@@ -16,7 +16,7 @@
         [style.background-color]="isFocused ? computedStyles.activeBackgroundColor : computedStyles.backgroundColor">
 
         <input #inputField [type]="type" [placeholder]="placeholder" [disabled]="disabled" [readOnly]="readonly"
-            [minLength]="minLength" [maxLength]="maxLength === Infinity ? null : maxLength" [value]="value"
+            [minLength]="minLength" [attr.maxlength]="maxLength === Infinity ? null : maxLength" [value]="value"
             (input)="onInputChange($event)" (focus)="isFocused = true" (blur)="onBlur()" class="mcv-input-field"
             [ngClass]="[
                  computedStyles.sizeVariant === 'sm' ? 'size-sm' : '',

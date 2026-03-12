@@ -15,6 +15,7 @@
         [style.background-color]="isFocused ? computedStyles.activeBackgroundColor : computedStyles.backgroundColor">
 
         <textarea [value]="value" [placeholder]="placeholder" [rows]="rows" [disabled]="disabled" [readOnly]="readonly"
+            [minLength]="minLength" [attr.maxlength]="maxLength === Infinity ? null : maxLength"
             (input)="onInputChange($event)" (focus)="isFocused = true" (blur)="onBlur()" class="mcv-textarea" [ngClass]="{
                     'size-sm': computedStyles.sizeVariant === 'sm',
                     'size-md': computedStyles.sizeVariant === 'md',

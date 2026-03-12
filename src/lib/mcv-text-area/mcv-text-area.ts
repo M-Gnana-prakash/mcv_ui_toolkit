@@ -28,7 +28,7 @@ export class McvTextArea implements ControlValueAccessor {
   @Input() readonly: boolean = false;
   @Input() rows: number = 4;
   @Input() minLength: number = 0;
-  @Input() maxLength: number = 0;
+  @Input() maxLength: number = Infinity;
 
   // Validation message shown by default
   @Input() needValidationStatusMessage: boolean = true;
@@ -39,6 +39,7 @@ export class McvTextArea implements ControlValueAccessor {
   public isFocused: boolean = false;
   public isTouched: boolean = false;
   public errors: string[] = [];
+  protected readonly Infinity = Infinity;
 
   private defaultStyles: McvFieldStyles = { ...DEFAULT_MCV_FIELD_STYLES };
 
